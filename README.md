@@ -26,19 +26,28 @@ only using hotkeys:
 ## Keyboard Bindings
 
 - **Snap to edges** (left/right/top/bottom ½, ⅔, ⅓):
-  - <kbd>Win</kbd> + <kbd>Alt</kbd> + <kbd>&larr;</kbd><kbd>&rarr;</kbd><kbd>&uarr;</kbd><kbd>&darr;</kbd>
+  - <kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>&larr;</kbd><kbd>&rarr;</kbd><kbd>&uarr;</kbd><kbd>&darr;</kbd>
   - Press multiple times to alternate between ½, ⅔ and ⅓.
 
 - **Corner snapping**
-  - <kbd>Win</kbd> + <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>&larr;</kbd>: top-left ½, ⅔ and ⅓
-  - <kbd>Win</kbd> + <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>&uarr;</kbd>: top-right ½, ⅔ and ⅓
-  - <kbd>Win</kbd> + <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>&darr;</kbd>: bottom-left ½, ⅔ and ⅓
-  - <kbd>Win</kbd> + <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>&rarr;</kbd>: bottom-right ½, ⅔ and ⅓
+  - <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>&larr;</kbd>: top-left ½, ⅔ and ⅓
+  - <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>&uarr;</kbd>: top-right ½, ⅔ and ⅓
+  - <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>&darr;</kbd>: bottom-left ½, ⅔ and ⅓
+  - <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>&rarr;</kbd>: bottom-right ½, ⅔ and ⅓
+
+- **Sixth snapping** (3x2 grid):
+  - <kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>V</kbd>: top-left sixth
+  - <kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>B</kbd>: top-center sixth
+  - <kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>N</kbd>: top-right sixth
+  - <kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>M</kbd>: bottom-left sixth
+  - <kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>,</kbd>: bottom-center sixth
+  - <kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>.</kbd>: bottom-right sixth
+
+- **Center third** (center ⅓ width, full height): <kbd>Shift</kbd>+<kbd>Alt</kbd>+<kbd>E</kbd>
 
 - **Center window** on the display: <kbd>Win</kbd>+<kbd>Alt</kbd>+<kbd>C</kbd>
 
 - **Maximize window**: <kbd>Win</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd>
-  (Obsolete since Windows natively supports <kbd>Win</kbd>+<kbd>&uarr;</kbd>)
 
 - **Always On Top (toggle)**: <kbd>Win</kbd>+<kbd>Alt</kbd>+<kbd>A</kbd>
 

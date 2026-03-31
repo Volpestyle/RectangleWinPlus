@@ -98,6 +98,39 @@ func bottomRightOneThirds(disp, _ w32.RECT) w32.RECT {
 	return merge(toRight(disp, 1, 3), toBottom(disp, 1, 2))
 }
 
+func centerThird(disp, _ w32.RECT) w32.RECT {
+	return w32.RECT{
+		Left:   disp.Left + disp.Width()/3,
+		Top:    disp.Top,
+		Right:  disp.Left + disp.Width()*2/3,
+		Bottom: disp.Top + disp.Height(),
+	}
+}
+
+// toCenterH returns the horizontal center third of the display (full height).
+func toCenterH(d w32.RECT) w32.RECT {
+	return w32.RECT{
+		Left:   d.Left + d.Width()/3,
+		Top:    d.Top,
+		Right:  d.Left + d.Width()*2/3,
+		Bottom: d.Top + d.Height(),
+	}
+}
+
+// Sixths: 3 columns x 2 rows (each cell is 1/6 of the screen)
+func topLeftSixth(disp, _ w32.RECT) w32.RECT   { return merge(toLeft(disp, 1, 3), toTop(disp, 1, 2)) }
+func topCenterSixth(disp, _ w32.RECT) w32.RECT { return merge(toCenterH(disp), toTop(disp, 1, 2)) }
+func topRightSixth(disp, _ w32.RECT) w32.RECT  { return merge(toRight(disp, 1, 3), toTop(disp, 1, 2)) }
+func bottomLeftSixth(disp, _ w32.RECT) w32.RECT {
+	return merge(toLeft(disp, 1, 3), toBottom(disp, 1, 2))
+}
+func bottomCenterSixth(disp, _ w32.RECT) w32.RECT {
+	return merge(toCenterH(disp), toBottom(disp, 1, 2))
+}
+func bottomRightSixth(disp, _ w32.RECT) w32.RECT {
+	return merge(toRight(disp, 1, 3), toBottom(disp, 1, 2))
+}
+
 func merge(x, y w32.RECT) w32.RECT {
 	return w32.RECT{Left: x.Left, Right: x.Right, Top: y.Top, Bottom: y.Bottom}
 }

@@ -83,14 +83,14 @@ func main() {
 	cycleCornerFuncs := func(i int) { cycleFuncs(cornerFuncs, &cornerFuncTurn, i) }
 
 	hks := []HotKey{
-		(HotKey{id: 1, mod: MOD_ALT | MOD_WIN | MOD_NOREPEAT, vk: w32.VK_LEFT, callback: func() { cycleEdgeFuncs(0) }}),
-		(HotKey{id: 2, mod: MOD_ALT | MOD_WIN | MOD_NOREPEAT, vk: w32.VK_RIGHT, callback: func() { cycleEdgeFuncs(1) }}),
-		(HotKey{id: 3, mod: MOD_ALT | MOD_WIN | MOD_NOREPEAT, vk: w32.VK_UP, callback: func() { cycleEdgeFuncs(2) }}),
-		(HotKey{id: 4, mod: MOD_ALT | MOD_WIN | MOD_NOREPEAT, vk: w32.VK_DOWN, callback: func() { cycleEdgeFuncs(3) }}),
-		(HotKey{id: 5, mod: MOD_CONTROL | MOD_ALT | MOD_WIN | MOD_NOREPEAT, vk: w32.VK_LEFT, callback: func() { cycleCornerFuncs(0) }}),
-		(HotKey{id: 6, mod: MOD_CONTROL | MOD_ALT | MOD_WIN | MOD_NOREPEAT, vk: w32.VK_UP, callback: func() { cycleCornerFuncs(1) }}),
-		(HotKey{id: 7, mod: MOD_CONTROL | MOD_ALT | MOD_WIN | MOD_NOREPEAT, vk: w32.VK_DOWN, callback: func() { cycleCornerFuncs(2) }}),
-		(HotKey{id: 8, mod: MOD_CONTROL | MOD_ALT | MOD_WIN | MOD_NOREPEAT, vk: w32.VK_RIGHT, callback: func() { cycleCornerFuncs(3) }}),
+		(HotKey{id: 1, mod: MOD_SHIFT | MOD_ALT | MOD_NOREPEAT, vk: w32.VK_LEFT, callback: func() { cycleEdgeFuncs(0) }}),
+		(HotKey{id: 2, mod: MOD_SHIFT | MOD_ALT | MOD_NOREPEAT, vk: w32.VK_RIGHT, callback: func() { cycleEdgeFuncs(1) }}),
+		(HotKey{id: 3, mod: MOD_SHIFT | MOD_ALT | MOD_NOREPEAT, vk: w32.VK_UP, callback: func() { cycleEdgeFuncs(2) }}),
+		(HotKey{id: 4, mod: MOD_SHIFT | MOD_ALT | MOD_NOREPEAT, vk: w32.VK_DOWN, callback: func() { cycleEdgeFuncs(3) }}),
+		(HotKey{id: 5, mod: MOD_CONTROL | MOD_SHIFT | MOD_ALT | MOD_NOREPEAT, vk: w32.VK_LEFT, callback: func() { cycleCornerFuncs(0) }}),
+		(HotKey{id: 6, mod: MOD_CONTROL | MOD_SHIFT | MOD_ALT | MOD_NOREPEAT, vk: w32.VK_UP, callback: func() { cycleCornerFuncs(1) }}),
+		(HotKey{id: 7, mod: MOD_CONTROL | MOD_SHIFT | MOD_ALT | MOD_NOREPEAT, vk: w32.VK_DOWN, callback: func() { cycleCornerFuncs(2) }}),
+		(HotKey{id: 8, mod: MOD_CONTROL | MOD_SHIFT | MOD_ALT | MOD_NOREPEAT, vk: w32.VK_RIGHT, callback: func() { cycleCornerFuncs(3) }}),
 		(HotKey{id: 50, mod: MOD_SHIFT | MOD_WIN, vk: 0x46 /*F*/, callback: func() {
 			lastResized = 0 // cause edgeFuncTurn to be reset
 			if err := maximize(); err != nil {
@@ -101,6 +101,56 @@ func main() {
 		(HotKey{id: 60, mod: MOD_ALT | MOD_WIN, vk: 0x43 /*C*/, callback: func() {
 			lastResized = 0 // cause edgeFuncTurn to be reset
 			if _, err := resize(w32.GetForegroundWindow(), center); err != nil {
+				fmt.Printf("warn: resize: %v\n", err)
+				return
+			}
+		}}),
+		(HotKey{id: 61, mod: MOD_SHIFT | MOD_ALT | MOD_NOREPEAT, vk: 0x45 /*E*/, callback: func() {
+			lastResized = 0
+			if _, err := resize(w32.GetForegroundWindow(), centerThird); err != nil {
+				fmt.Printf("warn: resize: %v\n", err)
+				return
+			}
+		}}),
+		// Sixths: 3x2 grid (Shift+Alt + V/B/N for top row, M/,/. for bottom row)
+		(HotKey{id: 80, mod: MOD_SHIFT | MOD_ALT | MOD_NOREPEAT, vk: 0x56 /*V*/, callback: func() {
+			lastResized = 0
+			if _, err := resize(w32.GetForegroundWindow(), topLeftSixth); err != nil {
+				fmt.Printf("warn: resize: %v\n", err)
+				return
+			}
+		}}),
+		(HotKey{id: 81, mod: MOD_SHIFT | MOD_ALT | MOD_NOREPEAT, vk: 0x42 /*B*/, callback: func() {
+			lastResized = 0
+			if _, err := resize(w32.GetForegroundWindow(), topCenterSixth); err != nil {
+				fmt.Printf("warn: resize: %v\n", err)
+				return
+			}
+		}}),
+		(HotKey{id: 82, mod: MOD_SHIFT | MOD_ALT | MOD_NOREPEAT, vk: 0x4E /*N*/, callback: func() {
+			lastResized = 0
+			if _, err := resize(w32.GetForegroundWindow(), topRightSixth); err != nil {
+				fmt.Printf("warn: resize: %v\n", err)
+				return
+			}
+		}}),
+		(HotKey{id: 83, mod: MOD_SHIFT | MOD_ALT | MOD_NOREPEAT, vk: 0x4D /*M*/, callback: func() {
+			lastResized = 0
+			if _, err := resize(w32.GetForegroundWindow(), bottomLeftSixth); err != nil {
+				fmt.Printf("warn: resize: %v\n", err)
+				return
+			}
+		}}),
+		(HotKey{id: 84, mod: MOD_SHIFT | MOD_ALT | MOD_NOREPEAT, vk: 0xBC /*,*/, callback: func() {
+			lastResized = 0
+			if _, err := resize(w32.GetForegroundWindow(), bottomCenterSixth); err != nil {
+				fmt.Printf("warn: resize: %v\n", err)
+				return
+			}
+		}}),
+		(HotKey{id: 85, mod: MOD_SHIFT | MOD_ALT | MOD_NOREPEAT, vk: 0xBE /*.*/, callback: func() {
+			lastResized = 0
+			if _, err := resize(w32.GetForegroundWindow(), bottomRightSixth); err != nil {
 				fmt.Printf("warn: resize: %v\n", err)
 				return
 			}
