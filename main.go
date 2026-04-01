@@ -65,7 +65,7 @@ func main() {
 			panic("foreground window is NULL")
 		}
 		if lastResized != hwnd {
-			*turns = make([]int, len(edgeFuncs)) // reset
+			*turns = make([]int, len(funcs)) // reset
 		}
 		if _, err := resize(hwnd, funcs[i][(*turns)[i]%len(funcs[i])]); err != nil {
 			fmt.Printf("warn: resize: %v\n", err)
@@ -153,6 +153,19 @@ func main() {
 			if _, err := resize(w32.GetForegroundWindow(), bottomRightSixth); err != nil {
 				fmt.Printf("warn: resize: %v\n", err)
 				return
+			}
+		}}),
+		// Move window to next/previous display (Ctrl+Alt+Right/Left)
+		(HotKey{id: 90, mod: MOD_CONTROL | MOD_ALT | MOD_NOREPEAT, vk: w32.VK_RIGHT, callback: func() {
+			lastResized = 0
+			if err := moveToDisplay(w32.GetForegroundWindow(), 1); err != nil {
+				fmt.Printf("warn: moveToDisplay: %v\n", err)
+			}
+		}}),
+		(HotKey{id: 91, mod: MOD_CONTROL | MOD_ALT | MOD_NOREPEAT, vk: w32.VK_LEFT, callback: func() {
+			lastResized = 0
+			if err := moveToDisplay(w32.GetForegroundWindow(), -1); err != nil {
+				fmt.Printf("warn: moveToDisplay: %v\n", err)
 			}
 		}}),
 		(HotKey{id: 70, mod: MOD_ALT | MOD_WIN, vk: 0x41 /*A*/, callback: func() {
@@ -299,6 +312,67 @@ func toggleAlwaysOnTop(hwnd w32.HWND) error {
 		if !w32.SetWindowPos(hwnd, w32.HWND_TOPMOST, 0, 0, 0, 0, w32.SWP_NOMOVE|w32.SWP_NOSIZE) {
 			return fmt.Errorf("failed to SetWindowPos(HWND_TOPMOST) :%v", w32.GetLastError())
 		}
+	}
+	return nil
+}
+
+// moveToDisplay moves the foreground window to the next (direction=1) or
+// previous (direction=-1) monitor, preserving its proportional position and size.
+func moveToDisplay(hwnd w32.HWND, direction int) error {
+	if !isZonableWindow(hwnd) {
+		return errors.New("foreground window is not zonable")
+	}
+
+	monitors := getMonitors()
+	if len(monitors) < 2 {
+		return nil
+	}
+
+	curMon := w32.MonitorFromWindow(hwnd, w32.MONITOR_DEFAULTTONEAREST)
+	curIdx := -1
+	for i, m := range monitors {
+		if m.handle == curMon {
+			curIdx = i
+			break
+		}
+	}
+	if curIdx == -1 {
+		return errors.New("current monitor not found")
+	}
+
+	targetIdx := (curIdx + direction + len(monitors)) % len(monitors)
+	if targetIdx == curIdx {
+		return nil
+	}
+
+	srcWork := monitors[curIdx].info.RcWork
+	tgtWork := monitors[targetIdx].info.RcWork
+
+	rect := w32.GetWindowRect(hwnd)
+	if rect == nil {
+		return errors.New("failed to get window rect")
+	}
+
+	// Proportional position and size relative to source work area
+	srcW := float64(srcWork.Width())
+	srcH := float64(srcWork.Height())
+	tgtW := float64(tgtWork.Width())
+	tgtH := float64(tgtWork.Height())
+
+	newLeft := tgtWork.Left + int32(float64(rect.Left-srcWork.Left)/srcW*tgtW)
+	newTop := tgtWork.Top + int32(float64(rect.Top-srcWork.Top)/srcH*tgtH)
+	newWidth := int32(float64(rect.Width()) / srcW * tgtW)
+	newHeight := int32(float64(rect.Height()) / srcH * tgtH)
+
+	fmt.Printf("> moving window 0x%x to display %d: (%d,%d) %dx%d\n",
+		hwnd, targetIdx, newLeft, newTop, newWidth, newHeight)
+
+	if !w32.ShowWindow(hwnd, w32.SW_SHOWNORMAL) {
+		// not fatal, window may already be in normal state
+	}
+	if !w32.SetWindowPos(hwnd, 0, int(newLeft), int(newTop), int(newWidth), int(newHeight),
+		w32.SWP_NOZORDER|w32.SWP_NOACTIVATE) {
+		return fmt.Errorf("failed to SetWindowPos: %d", w32.GetLastError())
 	}
 	return nil
 }

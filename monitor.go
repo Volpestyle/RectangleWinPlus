@@ -16,11 +16,37 @@ package main
 
 import (
 	"fmt"
+	"sort"
 	"syscall"
 
 	"github.com/gonutz/w32/v2"
 	"golang.org/x/sys/windows"
 )
+
+type monitorInfo struct {
+	handle w32.HMONITOR
+	info   w32.MONITORINFO
+}
+
+// getMonitors returns all monitors sorted left-to-right (then top-to-bottom).
+func getMonitors() []monitorInfo {
+	var monitors []monitorInfo
+	EnumMonitors(func(d w32.HMONITOR) bool {
+		var v w32.MONITORINFO
+		if !w32.GetMonitorInfo(d, &v) {
+			return false
+		}
+		monitors = append(monitors, monitorInfo{handle: d, info: v})
+		return true
+	})
+	sort.Slice(monitors, func(i, j int) bool {
+		if monitors[i].info.RcMonitor.Left != monitors[j].info.RcMonitor.Left {
+			return monitors[i].info.RcMonitor.Left < monitors[j].info.RcMonitor.Left
+		}
+		return monitors[i].info.RcMonitor.Top < monitors[j].info.RcMonitor.Top
+	})
+	return monitors
+}
 
 func EnumMonitors(f func(d w32.HMONITOR) bool) bool {
 	callback := syscall.NewCallback(func(h, _, _, _ uintptr) uintptr {
