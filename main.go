@@ -31,13 +31,26 @@ import (
 	"github.com/ahmetb/RectangleWin/w32ex"
 )
 
-var lastResized w32.HWND
+var (
+	lastResized w32.HWND
+	vdeskMgr    = newVdeskManager()
+)
 
 func main() {
 	runtime.LockOSThread() // since we bind hotkeys etc that need to dispatch their message here
+	defer func() {
+		if r := recover(); r != nil {
+			vdeskMgr.showAllWindows()
+			panic(r)
+		}
+	}()
+
 	if !w32ex.SetProcessDPIAware() {
 		panic("failed to set DPI aware")
 	}
+
+	vdeskMgr.loadAndRecover()
+	initHUD()
 
 	autorun, err := AutoRunEnabled()
 	if err != nil {
@@ -168,6 +181,11 @@ func main() {
 				fmt.Printf("warn: moveToDisplay: %v\n", err)
 			}
 		}}),
+		// Per-monitor virtual desktops
+		(HotKey{id: 100, mod: MOD_CONTROL | MOD_WIN | MOD_NOREPEAT, vk: w32.VK_UP, callback: func() { vdeskMgr.switchDesktop(1) }}),
+		(HotKey{id: 101, mod: MOD_CONTROL | MOD_WIN | MOD_NOREPEAT, vk: w32.VK_DOWN, callback: func() { vdeskMgr.switchDesktop(-1) }}),
+		(HotKey{id: 102, mod: MOD_CONTROL | MOD_SHIFT | MOD_WIN | MOD_NOREPEAT, vk: w32.VK_UP, callback: func() { vdeskMgr.createDesktop() }}),
+		(HotKey{id: 103, mod: MOD_CONTROL | MOD_SHIFT | MOD_WIN | MOD_NOREPEAT, vk: w32.VK_DOWN, callback: func() { vdeskMgr.destroyDesktop() }}),
 		(HotKey{id: 70, mod: MOD_ALT | MOD_WIN, vk: 0x41 /*A*/, callback: func() {
 			hwnd := w32.GetForegroundWindow()
 			if err := toggleAlwaysOnTop(hwnd); err != nil {
@@ -198,6 +216,7 @@ func main() {
 	go func() {
 		<-exitCh
 		fmt.Println("exit signal received")
+		vdeskMgr.showAllWindows()
 		systray.Quit() // causes WM_CLOSE, WM_QUIT, not sure if a side-effect
 	}()
 

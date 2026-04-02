@@ -67,6 +67,21 @@ func GetShellWindow() (hwnd w32.HWND) {
 // (e.g. 1440p + 5K displays at different scale factors).
 const DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 = ^uintptr(3) // -4
 
+func CloakWindow(hwnd w32.HWND, cloak bool) bool {
+	var val uint32
+	if cloak {
+		val = 1
+	}
+	hr := w32.DwmSetWindowAttribute(hwnd, w32.DWMWA_CLOAK,
+		w32.LPCVOID(unsafe.Pointer(&val)), uint32(unsafe.Sizeof(val)))
+	return hr >= 0 // S_OK = 0
+}
+
+func IsWindowCloaked(hwnd w32.HWND) bool {
+	ok, cloaked := w32.DwmGetWindowAttributeCLOAKED(hwnd)
+	return ok && cloaked != 0
+}
+
 func SetProcessDPIAware() bool {
 	// Try the modern per-monitor v2 API first (Windows 10 1703+).
 	proc := user32.NewProc("SetProcessDpiAwarenessContext")

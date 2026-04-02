@@ -51,6 +51,32 @@ only using hotkeys:
 
 - **Always On Top (toggle)**: <kbd>Win</kbd>+<kbd>Alt</kbd>+<kbd>A</kbd>
 
+- **Move to display** (next/previous monitor):
+  - <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>&rarr;</kbd><kbd>&larr;</kbd>
+
+### Per-Monitor Virtual Desktops
+
+RectangleWin adds independent virtual desktops for each monitor — like macOS
+Spaces, but on Windows. Unlike Windows' built-in virtual desktops (which switch
+all monitors together), these let you switch desktops on one monitor without
+affecting the others.
+
+A HUD overlay shows the current desktop number when switching.
+
+- **Switch desktop** on current monitor: <kbd>Ctrl</kbd> + <kbd>Win</kbd> + <kbd>&uarr;</kbd><kbd>&darr;</kbd>
+- **Create new desktop** on current monitor: <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Win</kbd> + <kbd>&uarr;</kbd>
+- **Close current desktop** on current monitor: <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Win</kbd> + <kbd>&darr;</kbd>
+
+Desktops are created and destroyed on demand — there's no fixed limit. Closing a
+desktop merges its windows into the neighboring desktop.
+
+These operate as a subsystem inside Windows' own virtual desktops, so you can use
+both together for even more workspace flexibility.
+
+> **Safety:** If RectangleWin crashes, hidden windows are automatically restored
+> on next launch. You can also click **Show All Windows** in the system tray to
+> manually restore everything.
+
 ## Why?
 
 It seems that no window snapping utility for Windows is capable of letting

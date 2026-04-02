@@ -78,6 +78,15 @@ func onReady() {
 
 	systray.AddSeparator()
 
+	mShowAll := systray.AddMenuItem("Show All Windows", "Uncloak all hidden virtual desktop windows")
+	go func() {
+		for range mShowAll.ClickedCh {
+			vdeskMgr.showAllWindows()
+		}
+	}()
+
+	systray.AddSeparator()
+
 	mQuit := systray.AddMenuItem("Quit", "")
 	go func() {
 		<-mQuit.ClickedCh
@@ -90,4 +99,5 @@ func onReady() {
 
 func onExit() {
 	fmt.Println("onExit invoked")
+	vdeskMgr.showAllWindows()
 }
