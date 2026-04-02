@@ -1,29 +1,52 @@
-# RectangleWin
+# RectangleWinPlus
 
-A minimalistic Windows rewrite of macOS
-[Rectangle.app](https://rectangleapp.com)/[Spectacle.app](https://www.spectacleapp.com/).
-([Why?](#why))
+A hotkey-oriented window snapping and resizing tool for Windows, with
+**per-monitor virtual desktops**.
 
-A hotkey-oriented window snapping and resizing tool for Windows.
+Forked from [ahmetb/RectangleWin](https://github.com/ahmetb/RectangleWin)
+(a Windows rewrite of macOS [Rectangle.app](https://rectangleapp.com)) to add
+per-monitor virtual desktops, multi-monitor support, and additional snap zones.
 
-This animation illustrates how RectangleWin helps me move windows to edges
+## Per-Monitor Virtual Desktops
+
+RectangleWinPlus adds independent virtual desktops for each monitor — like macOS
+Spaces, but on Windows. Unlike Windows' built-in virtual desktops (which switch
+all monitors together), these let you switch desktops on one monitor without
+affecting the others.
+
+A HUD overlay shows the current desktop number when switching.
+
+- **Switch desktop** on current monitor: <kbd>Ctrl</kbd> + <kbd>Win</kbd> + <kbd>&uarr;</kbd><kbd>&darr;</kbd>
+- **Create new desktop** on current monitor: <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Win</kbd> + <kbd>&uarr;</kbd>
+- **Close current desktop** on current monitor: <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Win</kbd> + <kbd>&darr;</kbd>
+- **Move window to another monitor**: <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>&rarr;</kbd><kbd>&larr;</kbd>
+
+Desktops are created and destroyed on demand — there's no fixed limit. Closing a
+desktop merges its windows into the neighboring desktop. Move windows between
+monitors with <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>&rarr;</kbd>/<kbd>&larr;</kbd>
+— the window joins whichever desktop is active on the target monitor.
+
+### Using with Windows Virtual Desktops
+
+These per-monitor desktops operate as a subsystem inside Windows' own virtual
+desktops. Windows desktops (<kbd>Win</kbd>+<kbd>Ctrl</kbd>+<kbd>&larr;</kbd><kbd>&rarr;</kbd>)
+switch all monitors together; RectangleWinPlus desktops switch each monitor
+independently. You can use both together for a full 3D grid of workspaces:
+Windows desktops on one axis, per-monitor desktops on the other.
+
+> **Safety:** If RectangleWinPlus crashes, hidden windows are automatically restored
+> on next launch. You can also click **Show All Windows** in the system tray to
+> manually restore everything.
+
+## Window Snapping
+
+This animation illustrates how RectangleWinPlus helps me move windows to edges
 and corners (and cycle through half, one-thirds or two thirds width or height)
 only using hotkeys:
 
-![RectangleWin demo](./assets/RectangleWin-demo.gif)
+![RectangleWinPlus demo](./assets/RectangleWin-demo.gif)
 
-## Install
-
-1. Go to [Releases](https://github.com/ahmetb/RectangleWin/releases) and
-   download the suitable binary for your architecture (typically x64).
-
-2. Launch the `.exe` file. Now the program icon should be visible on system
-   tray!
-
-3. Click on the icon and mark as "Run on startup" to make sure you don't have
-   to run it every time you reboot your PC.
-
-## Keyboard Bindings
+### Keyboard Bindings
 
 - **Snap to edges** (left/right/top/bottom ½, ⅔, ⅓):
   - <kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>&larr;</kbd><kbd>&rarr;</kbd><kbd>&uarr;</kbd><kbd>&darr;</kbd>
@@ -54,28 +77,16 @@ only using hotkeys:
 - **Move to display** (next/previous monitor):
   - <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>&rarr;</kbd><kbd>&larr;</kbd>
 
-### Per-Monitor Virtual Desktops
+## Install
 
-RectangleWin adds independent virtual desktops for each monitor — like macOS
-Spaces, but on Windows. Unlike Windows' built-in virtual desktops (which switch
-all monitors together), these let you switch desktops on one monitor without
-affecting the others.
+1. Go to [Releases](https://github.com/Volpestyle/RectangleWinPlus/releases) and
+   download the suitable binary for your architecture (typically x64).
 
-A HUD overlay shows the current desktop number when switching.
+2. Launch the `.exe` file. Now the program icon should be visible on system
+   tray!
 
-- **Switch desktop** on current monitor: <kbd>Ctrl</kbd> + <kbd>Win</kbd> + <kbd>&uarr;</kbd><kbd>&darr;</kbd>
-- **Create new desktop** on current monitor: <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Win</kbd> + <kbd>&uarr;</kbd>
-- **Close current desktop** on current monitor: <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Win</kbd> + <kbd>&darr;</kbd>
-
-Desktops are created and destroyed on demand — there's no fixed limit. Closing a
-desktop merges its windows into the neighboring desktop.
-
-These operate as a subsystem inside Windows' own virtual desktops, so you can use
-both together for even more workspace flexibility.
-
-> **Safety:** If RectangleWin crashes, hidden windows are automatically restored
-> on next launch. You can also click **Show All Windows** in the system tray to
-> manually restore everything.
+3. Click on the icon and mark as "Run on startup" to make sure you don't have
+   to run it every time you reboot your PC.
 
 ## Why?
 
@@ -102,7 +113,7 @@ go generate
 GOOS=windows go build -ldflags -H=windowsgui .
 ```
 
-The `RectangleWin.exe` will be available in the same directory.
+The `RectangleWinPlus.exe` will be available in the same directory.
 
 ## License
 

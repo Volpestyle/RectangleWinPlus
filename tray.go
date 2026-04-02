@@ -25,7 +25,7 @@ import (
 //go:embed assets/tray_icon.ico
 var icon []byte
 
-const repo = "https://github.com/ahmetb/RectangleWin"
+const repo = "https://github.com/Volpestyle/RectangleWinPlus"
 
 func initTray() {
 	systray.Register(onReady, onExit)
